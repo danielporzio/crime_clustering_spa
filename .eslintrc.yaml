@@ -1,0 +1,65 @@
+parser: babel-eslint
+
+env:
+  browser: true
+
+plugins:
+  - import
+  - jest
+  - react
+
+rules:
+  # 2: error
+  # 1: warn
+  # 0: ignore
+
+  arrow-parens: [2, as-needed]
+  arrow-body-style: 0
+  camelcase: 2
+  linebreak-style: 0
+  prefer-stateless-function: 0
+  comma-dangle: [2, "always-multiline"]
+  keyword-spacing: [2, {before: true}]
+  no-confusing-arrow: 2
+  no-console: [1, { allow: ["warn", "error"] }]
+  no-debugger: 1
+  no-empty-function: 2
+  no-mixed-spaces-and-tabs: 2
+  no-multiple-empty-lines: [2, {max: 1, maxEOF: 0, maxBOF: 0}]
+  no-trailing-spaces: 2
+  no-unused-vars: [2, {argsIgnorePattern: "^_"}]
+  no-whitespace-before-property: 2
+  object-curly-spacing: [2, always]
+  prefer-arrow-callback: 2
+  prefer-const: 2
+  prefer-template: 2
+  quotes: [2, single]
+  semi: [2, always]
+  indent: [2, 2]
+  max-len: 0
+  class-methods-use-this: 0
+  no-param-reassign: 0
+
+  # plugins config below
+
+  import/default: 2
+  import/first: 2
+  import/newline-after-import: 2
+  import/no-commonjs: 2
+  import/prefer-default-export: 0
+  import/order: [2, {newlines-between: always, groups: [builtin, external, parent, sibling, index]}]
+
+  jest/no-focused-tests: 2
+  jest/no-identical-title: 2
+
+  react/class-methods-use-this: 0
+  react/jsx-uses-react: 2
+  react/jsx-uses-vars: 2
+  react/jsx-no-duplicate-props: 2
+  react/prop-types: [0, { ignore: [children] }]
+  react/prefer-stateless-function: 2
+  react/react-in-jsx-scope: 2
+  react/jsx-filename-extension: 0
+  react/jsx-indent: [2, 2]
+  react/jsx-indent-props: [2, 2]
+    
