@@ -1,0 +1,16 @@
+@import "../app/colors";
+
+.footer {
+  height: 5vh;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin: auto;
+}
+
+.footer__legend {
+  font-size: 12px;
+  vertical-align: sub;
+  padding-left: 20px;
+  color: $gray-light;
+}

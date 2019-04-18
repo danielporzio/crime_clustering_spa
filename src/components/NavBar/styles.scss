@@ -1,0 +1,14 @@
+@import "../app/colors";
+
+.navbar {
+  color: $gray-main;
+  font-size: 20px;
+  padding: 10px 0 10px 40px;
+  height: 5vh;
+}
+
+.navbar__separator {
+  border-bottom: 1px solid $gray-light;
+  padding-top: 5px;
+  width: 50%;
+}
