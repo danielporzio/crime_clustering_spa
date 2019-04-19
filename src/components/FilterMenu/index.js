@@ -7,11 +7,15 @@ import './styles.scss';
 class FilterMenu extends React.Component {
   state = {
     year: 2018,
+    crimeType: 'All',
   };
 
   constructor() {
     super();
-    this.state = { year: 2018 };
+    this.state = {
+      year: 2018,
+      crimeType: 'All',
+    };
   }
 
   handleChange = event => {
@@ -31,7 +35,7 @@ class FilterMenu extends React.Component {
           }}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>All</em>
           </MenuItem>
           <MenuItem value={2011}>2011</MenuItem>
           <MenuItem value={2012}>2012</MenuItem>
@@ -39,13 +43,13 @@ class FilterMenu extends React.Component {
           <MenuItem value={2014}>2014</MenuItem>
         </Select>
 
-        <InputLabel htmlFor="crime_type-label">Crime type</InputLabel>
+        <InputLabel htmlFor="crimeType-label">Crime type</InputLabel>
         <Select
-          value={this.state.crime_type}
+          value={this.state.crimeType}
           onChange={this.handleChange}
           inputProps={{
-            name: 'crime_type',
-            id: 'crime_type-select',
+            name: 'crimeType',
+            id: 'crimeType-select',
           }}
         >
           <MenuItem value="">
