@@ -5,26 +5,23 @@ import './styles.scss';
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
 
 class Map extends React.Component {
-  state = {
-    mapStyle: '',
-    viewport: {
-      latitude: 37.805,
-      longitude: -122.447,
-      zoom: 15.5,
-      bearing: 0,
-      pitch: 0,
-    },
-  }
-
   _onViewportChange = viewport => this.setState({ viewport });
 
   constructor() {
     super();
-    this.state = {};
+
+    this.state = {
+      mapStyle: 'mapbox://styles/mapbox/light-v10',
+      viewport: {
+        latitude: 41.878113,
+        longitude: -87.629799,
+        zoom: 8,
+      },
+    };
   }
 
   render() {
-    const { viewport, mapStyle } = this.state;
+    const { mapStyle, viewport } = this.state;
 
     return (
       <div className='map-wrapper'>
