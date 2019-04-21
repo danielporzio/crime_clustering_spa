@@ -1,11 +1,14 @@
 import React from 'react';
-import MapGL from 'react-map-gl';
+import MapGL, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
+
+import CRIMES from '../../data/crimes.json';
+import MapPin from '../MapPin';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
 
 class Map extends React.Component {
-  _onViewportChange = viewport => this.setState({ viewport });
 
   constructor() {
     super();
@@ -20,6 +23,19 @@ class Map extends React.Component {
     };
   }
 
+  _onViewportChange = viewport => this.setState({ viewport });
+
+  _renderMarker = (crime, index) => {
+    return (
+      <Marker
+        key={`marker-${index}`}
+        longitude={crime.longitude}
+        latitude={crime.latitude} >
+        <MapPin size={5}/>
+      </Marker>
+    );
+  }
+
   render() {
     const { mapStyle, viewport } = this.state;
 
@@ -31,8 +47,17 @@ class Map extends React.Component {
           height='100%'
           mapStyle={mapStyle}
           onViewportChange={this._onViewportChange}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-        />
+          mapboxApiAccessToken={MAPBOX_TOKEN} >
+
+          { CRIMES.map(this._renderMarker) }
+
+          <div className="fullscreen-control__wrapper">
+            <FullscreenControl />
+          </div>
+          <div className="nav-control__wrapper">
+            <NavigationControl onViewportChange={this._onViewportChange} />
+          </div>
+        </MapGL>
       </div>
     );
   }
