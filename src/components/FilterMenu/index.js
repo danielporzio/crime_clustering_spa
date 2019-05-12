@@ -5,11 +5,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import './styles.scss';
 
 class FilterMenu extends React.Component {
-  state = {
-    year: 2018,
-    crimeType: 'All',
-  };
-
   constructor() {
     super();
     this.state = {

@@ -5,7 +5,6 @@ import Map from '../Map';
 import './styles.scss';
 
 class Dashboard extends React.Component {
-
   constructor() {
     super();
     this.state = {};

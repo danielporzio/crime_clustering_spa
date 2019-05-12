@@ -9,7 +9,6 @@ import './styles.scss';
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
 
 class Map extends React.Component {
-
   constructor() {
     super();
 
