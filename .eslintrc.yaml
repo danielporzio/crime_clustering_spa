@@ -18,7 +18,7 @@ rules:
   camelcase: 2
   linebreak-style: 0
   prefer-stateless-function: 0
-  comma-dangle: [2, "always-multiline"]
+  comma-dangle: [0, "always-multiline"]
   keyword-spacing: [2, {before: true}]
   no-confusing-arrow: 2
   no-console: [1, { allow: ["warn", "error"] }]
@@ -62,4 +62,3 @@ rules:
   react/jsx-filename-extension: 0
   react/jsx-indent: [2, 2]
   react/jsx-indent-props: [2, 2]
-    

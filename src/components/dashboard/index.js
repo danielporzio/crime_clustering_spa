@@ -1,5 +1,9 @@
 import React from 'react';
 
+import FilterMenu from '../FilterMenu';
+import Map from '../Map';
+import './styles.scss';
+
 class Dashboard extends React.Component {
   constructor() {
     super();
@@ -8,8 +12,9 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
-        React app!
+      <div className='dashboard-body'>
+        <FilterMenu/>
+        <Map/>
       </div>
     );
   }
