@@ -9,8 +9,25 @@ class FilterMenu extends React.Component {
     super();
     this.state = {
       year: 2018,
-      crimeType: 'All',
+      crimeTypes: [
+        'All',
+        'Murder',
+        'Theft',
+        'Hijack',
+        'Violence'
+      ],
+      years: [
+        'All',
+        '2011',
+        '2012',
+        '2013',
+        '2014'
+      ],
+      year: 'All',
+      crimeType: 'All'
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = event => {
@@ -29,13 +46,11 @@ class FilterMenu extends React.Component {
             id: 'year-select',
           }}
         >
-          <MenuItem value="">
-            <em>All</em>
-          </MenuItem>
-          <MenuItem value={2011}>2011</MenuItem>
-          <MenuItem value={2012}>2012</MenuItem>
-          <MenuItem value={2013}>2013</MenuItem>
-          <MenuItem value={2014}>2014</MenuItem>
+          {
+            this.state.years.map(year => {
+              return <MenuItem key={year} value={year}>{year}</MenuItem>;
+            })
+          }
         </Select>
 
         <InputLabel htmlFor="crimeType-label">Crime type</InputLabel>
@@ -47,13 +62,11 @@ class FilterMenu extends React.Component {
             id: 'crimeType-select',
           }}
         >
-          <MenuItem value="">
-            <em>All</em>
-          </MenuItem>
-          <MenuItem value={'Murder'}>Murder</MenuItem>
-          <MenuItem value={'Theft'}>Theft</MenuItem>
-          <MenuItem value={'Hijack'}>Hijack</MenuItem>
-          <MenuItem value={'Violence'}>Violence</MenuItem>
+          {
+            this.state.crimeTypes.map(type => {
+              return <MenuItem key={type} value={type}>{type}</MenuItem>;
+            })
+          }
         </Select>
       </div>
     );
