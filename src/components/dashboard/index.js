@@ -1,10 +1,12 @@
 import React from 'react';
-import axios from 'axios'
+import axios from 'axios';
 
 import FilterMenu from '../FilterMenu';
 import Map from '../Map';
 
 import './styles.scss';
+
+const CRIMES_ENDPOINT_URL = 'https://crime-clustering-staging.herokuapp.com/crimes/';
 
 class Dashboard extends React.Component {
   constructor() {
@@ -15,10 +17,11 @@ class Dashboard extends React.Component {
   }
 
   getCrimes = () => {
-    console.log('exito!');
-    // axios.get('https://api.github.com/users/maecapozzi')
-    //   .then(response => console.log(response))
-    this.state.crimes = [];
+    axios.get(CRIMES_ENDPOINT_URL,
+      { headers: { 'Access-Control-Allow-Origin': '*' } })
+      .then(response => {
+        this.setState({ crimes: response.data });
+      });
   };
 
   render() {
