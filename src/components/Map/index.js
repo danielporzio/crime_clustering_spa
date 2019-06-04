@@ -1,7 +1,7 @@
 import React from 'react';
 import MapGL, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
 
-import CRIMES from '../../data/crimes.json';
+import colorCluster from '../../data/ClusterColors.js';
 import MapPin from '../MapPin';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
@@ -25,12 +25,13 @@ class Map extends React.Component {
   _onViewportChange = viewport => this.setState({ viewport });
 
   _renderMarker = (crime, index) => {
+
     return (
       <Marker
         key={`marker-${index}`}
         longitude={crime.longitude}
         latitude={crime.latitude} >
-        <MapPin size={5}/>
+        <MapPin size={5} color={colorCluster(crime.cluster)}/>
       </Marker>
     );
   }
@@ -48,7 +49,7 @@ class Map extends React.Component {
           onViewportChange={this._onViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN} >
 
-          { CRIMES.map(this._renderMarker) }
+          { this.props.crimes.map(this._renderMarker) }
 
           <div className="fullscreen-control__wrapper">
             <FullscreenControl />
