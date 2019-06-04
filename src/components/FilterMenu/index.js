@@ -28,8 +28,6 @@ class FilterMenu extends React.Component {
       year: 'All',
       crimeType: 'All',
     };
-
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = event => {

@@ -14,11 +14,11 @@ class Dashboard extends React.Component {
     };
   }
 
-  getCrimes = event => {
-    console.log('exito!')
+  getCrimes = () => {
+    console.log('exito!');
     // axios.get('https://api.github.com/users/maecapozzi')
     //   .then(response => console.log(response))
-    this.state.crimes = []
+    this.state.crimes = [];
   };
 
   render() {
