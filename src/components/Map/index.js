@@ -9,7 +9,7 @@ import './styles.scss';
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
 
 class Map extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
 
     this.state = {
@@ -19,13 +19,19 @@ class Map extends React.Component {
         longitude: -87.629799,
         zoom: 8,
       },
+      markers: props.crimes.map(this._renderMarker)
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.crimes !== prevProps.crimes) {
+      this.setState({ markers: this.props.crimes.map(this._renderMarker) });
+    }
   }
 
   _onViewportChange = viewport => this.setState({ viewport });
 
   _renderMarker = (crime, index) => {
-
     return (
       <Marker
         key={`marker-${index}`}
@@ -49,7 +55,7 @@ class Map extends React.Component {
           onViewportChange={this._onViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN} >
 
-          { this.props.crimes.map(this._renderMarker) }
+          { this.state.markers }
 
           <div className="fullscreen-control__wrapper">
             <FullscreenControl />
