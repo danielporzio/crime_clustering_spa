@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-  BrowserRouter as Router, Route, Switch, Redirect, browserHistory,
+  BrowserRouter as Router, Route, Switch, Redirect,
 } from 'react-router-dom';
-
-import Dashboard from '../Dashboard';
+import Dashboard from '../dashboard';
 import NavBar from '../NavBar';
 import Footer from '../Footer';
 import './styles.scss';
@@ -18,7 +17,7 @@ class App extends React.Component {
     return (
       <div className='app-body'>
         <NavBar/>
-        <Router history={browserHistory}>
+        <Router>
           <Switch>
             <Redirect exact from="/" to="/dashboard" />
             <Route
