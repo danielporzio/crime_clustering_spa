@@ -24,7 +24,7 @@ class Map extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.crimes !== prevProps.crimes) {
+    if (!equal(this.props.crimes, prevProps.crimes)) {
       this.setState({ markers: this.props.crimes.map(this._renderMarker) });
     }
   }
