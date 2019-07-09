@@ -1,4 +1,19 @@
+@import "../app/colors";
+
 .filter-menu {
   height: 20%;
   margin: 25px 0 10px 40px;
+}
+
+.filter-menu__select {
+  margin-left: 10px;
+  margin-right: 30px;
+}
+
+.filter-menu__button {
+  background-color: $gray-light;
+
+  &:hover {
+    background-color: $blue-light;
+  }
 }

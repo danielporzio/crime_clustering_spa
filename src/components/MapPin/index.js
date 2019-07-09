@@ -6,21 +6,34 @@ const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,
 
 const pinStyle = {
   cursor: 'pointer',
-  fill: '#d00',
   stroke: 'none'
 };
 
-function MapPin(props) {
-  const size = props.size;
-  return (
-    <svg
-      height={size}
-      viewBox="0 0 24 24"
-      style={ { ...pinStyle, transform: `translate(${-size / 2}px,${-size}px)` } }
-    >
-      <path d={ICON}/>
-    </svg>
-  );
+class MapPin extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      size: props.size,
+      color: props.color
+    };
+  }
+
+  render() {
+    const size = this.state.size;
+    return (
+      <svg
+        height={size}
+        viewBox="0 0 24 24"
+        style={ { ...pinStyle,
+          fill: this.state.color,
+          transform: `translate(${-size / 2}px,${-size}px)` }
+        }
+      >
+        <path d={ICON}/>
+      </svg>
+    );
+  }
 }
 
 export default MapPin;

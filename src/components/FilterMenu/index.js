@@ -2,6 +2,8 @@ import React from 'react';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+
 import './styles.scss';
 
 class FilterMenu extends React.Component {
@@ -9,6 +11,21 @@ class FilterMenu extends React.Component {
     super();
     this.state = {
       year: 2018,
+      crimeTypes: [
+        'All',
+        'Murder',
+        'Theft',
+        'Hijack',
+        'Violence'
+      ],
+      years: [
+        'All',
+        '2011',
+        '2012',
+        '2013',
+        '2014'
+      ],
+      year: 'All',
       crimeType: 'All',
     };
   }
@@ -22,6 +39,7 @@ class FilterMenu extends React.Component {
       <div className='filter-menu'>
         <InputLabel htmlFor="year-label">Year</InputLabel>
         <Select
+          className='filter-menu__select'
           value={this.state.year}
           onChange={this.handleChange}
           inputProps={{
@@ -29,17 +47,16 @@ class FilterMenu extends React.Component {
             id: 'year-select',
           }}
         >
-          <MenuItem value="">
-            <em>All</em>
-          </MenuItem>
-          <MenuItem value={2011}>2011</MenuItem>
-          <MenuItem value={2012}>2012</MenuItem>
-          <MenuItem value={2013}>2013</MenuItem>
-          <MenuItem value={2014}>2014</MenuItem>
+          {
+            this.state.years.map(year => {
+              return <MenuItem key={year} value={year}>{year}</MenuItem>;
+            })
+          }
         </Select>
 
         <InputLabel htmlFor="crimeType-label">Crime type</InputLabel>
         <Select
+          className='filter-menu__select'
           value={this.state.crimeType}
           onChange={this.handleChange}
           inputProps={{
@@ -47,14 +64,18 @@ class FilterMenu extends React.Component {
             id: 'crimeType-select',
           }}
         >
-          <MenuItem value="">
-            <em>All</em>
-          </MenuItem>
-          <MenuItem value={'Murder'}>Murder</MenuItem>
-          <MenuItem value={'Theft'}>Theft</MenuItem>
-          <MenuItem value={'Hijack'}>Hijack</MenuItem>
-          <MenuItem value={'Violence'}>Violence</MenuItem>
+          {
+            this.state.crimeTypes.map(type => {
+              return <MenuItem key={type} value={type}>{type}</MenuItem>;
+            })
+          }
         </Select>
+        <Button
+          variant="contained"
+          className='filter-menu__button'
+          onClick={this.props.getCrimes}>
+          Submit
+        </Button>
       </div>
     );
   }
