@@ -2,7 +2,7 @@ import React from 'react';
 import MapGL, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
 import equal from 'fast-deep-equal';
 
-import colorCluster from '../../data/clusterColors.js';
+import colorCluster from '../../data/ClusterColors.js';
 import MapPin from '../MapPin';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
