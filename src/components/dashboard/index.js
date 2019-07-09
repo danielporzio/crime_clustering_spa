@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 
+import { Environment as Env } from '../../config.js';
 import FilterMenu from '../FilterMenu';
 import Map from '../Map';
 
 import './styles.scss';
-
-const CRIMES_ENDPOINT_URL = 'https://crime-clustering-staging.herokuapp.com/crimes/';
 
 class Dashboard extends React.Component {
   constructor() {
@@ -17,7 +16,8 @@ class Dashboard extends React.Component {
   }
 
   getCrimes = () => {
-    axios.get(CRIMES_ENDPOINT_URL,
+    const crimesURL = `${Env.getCurrent().api.dataURL}/crimes`;
+    axios.get(crimesURL,
       { headers: { 'Access-Control-Allow-Origin': '*' } })
       .then(response => {
         this.setState({ crimes: response.data });
