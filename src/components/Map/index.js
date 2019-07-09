@@ -1,10 +1,12 @@
 import React from 'react';
 import MapGL, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
+import equal from 'fast-deep-equal';
 
 import colorCluster from '../../data/ClusterColors.js';
 import MapPin from '../MapPin';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
+
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
 
