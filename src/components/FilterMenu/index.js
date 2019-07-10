@@ -10,23 +10,70 @@ class FilterMenu extends React.Component {
   constructor() {
     super();
     this.state = {
-      year: 2018,
-      crimeTypes: [
-        'All',
-        'Murder',
-        'Theft',
-        'Hijack',
-        'Violence'
+      primaryType: [
+        'THEFT',
+        'BATTERY',
+        'CRIMINAL DAMAGE',
+        'NARCOTICS',
+        'ASSAULT',
+        'OTHER OFFENSE',
+        'BURGLARY',
+        'MOTOR VEHICLE THEFT',
+        'DECEPTIVE PRACTICE',
+        'ROBBERY',
+        'CRIMINAL TRESPASS',
+        'WEAPONS VIOLATION'
       ],
-      years: [
-        'All',
+      year: [
+        '2002',
+        '2001',
+        '2003',
+        '2004',
+        '2005',
+        '2006',
+        '2007',
+        '2008',
+        '2009',
+        '2010',
         '2011',
-        '2012',
-        '2013',
-        '2014'
+        '2012'
       ],
-      year: 'All',
-      crimeType: 'All',
+      description: [
+        'SIMPLE',
+        '$500 AND UNDER',
+        'DOMESTIC BATTERY SIMPLE',
+        'TO VEHICLE',
+        'TO PROPERTY',
+        'OVER $500',
+        'POSS: CANNABIS 30GMS OR LESS',
+        'FORCIBLE ENTRY',
+        'AUTOMOBILE',
+        'FROM BUILDING',
+        'RETAIL THEFT',
+        'TELEPHONE THREAT'
+      ],
+      locationDescription: [
+        'STREET',
+        'RESIDENCE',
+        'APARTMENT',
+        'SIDEWALK',
+        'OTHER',
+        'PARKING LOT/GARAGE(NON.RESID.)',
+        'ALLEY',
+        'SCHOOL, PUBLIC, BUILDING',
+        'RESIDENCE-GARAGE',
+        'SMALL RETAIL STORE',
+        'RESIDENCE PORCH/HALLWAY',
+        'VEHICLE NON-COMMERCIAL',
+      ],
+      arrest: [
+        'True',
+        'False'
+      ],
+      domestic: [
+        'True',
+        'False'
+      ]
     };
   }
 
