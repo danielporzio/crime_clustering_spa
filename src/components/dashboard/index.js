@@ -15,11 +15,15 @@ class Dashboard extends React.Component {
     };
   }
 
-  getCrimes = () => {
+  getCrimes = (params) => {
     const crimesURL = `${Env.getCurrent().api.dataURL}/crimes`;
-    axios.get(crimesURL,
-      { headers: { 'Access-Control-Allow-Origin': '*' } })
+    axios
+      .get(crimesURL, {
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        params: params
+      })
       .then(response => {
+        console.log(response.data)
         this.setState({ crimes: response.data });
       });
   };
