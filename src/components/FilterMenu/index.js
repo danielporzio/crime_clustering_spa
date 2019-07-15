@@ -79,6 +79,13 @@ class FilterMenu extends React.Component {
         'All',
         'True',
         'False'
+      ],
+      algorithmTypes: [
+        'None',
+        'DBSCAN',
+        'HDBSCAN',
+        'K-MEANS',
+        'DBSCAN++'
       ]
     };
   }
@@ -88,14 +95,15 @@ class FilterMenu extends React.Component {
   };
 
   prepareCrimeFilters = () => {
-    const { primaryType, year, description, arrest, location, domestic } = this.state
+    const { primaryType, year, description, arrest, location, domestic, algorithmType } = this.state
     const params = {
       primary_type: primaryType,
       year: year,
       description: description,
       arrest: arrest,
       location_description: location,
-      domestic: domestic
+      domestic: domestic,
+      algorithm: algorithmType
     };
     const filteredParams = Object.keys(params).reduce( (previous, key) => {
       if (typeof params[key] !== 'undefined' && params[key] !== 'All') {
@@ -203,6 +211,21 @@ class FilterMenu extends React.Component {
           {
             this.state.domestics.map(domestic => {
               return <MenuItem key={domestic} value={domestic}>{domestic}</MenuItem>;
+            })
+          }
+        </Select>
+        <Select
+          className='filter-menu__select'
+          value={this.state.algorithmType || 'None'}
+          onChange={this.handleChange}
+          inputProps={{
+            name: 'algorithmType',
+            id: 'algorithmType-select',
+          }}
+        >
+          {
+            this.state.algorithmTypes.map(algorithmType => {
+              return <MenuItem key={algorithmType} value={algorithmType}>{algorithmType}</MenuItem>;
             })
           }
         </Select>
