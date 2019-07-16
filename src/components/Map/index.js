@@ -39,7 +39,7 @@ class Map extends React.Component {
         key={`marker-${index}`}
         longitude={crime.longitude}
         latitude={crime.latitude} >
-        <MapPin size={5} color={colorCluster(crime.cluster)}/>
+        <MapPin size={5} color={colorCluster(crime.label)}/>
       </Marker>
     );
   }
