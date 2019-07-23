@@ -7,7 +7,6 @@ import MapPin from '../MapPin';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
 
-
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
 const NOISE_COLOR = '#000';
 
@@ -46,8 +45,8 @@ class Map extends React.Component {
     );
   }
 
-  colorizeCluster = (clusterNumber) => {
-    let colorsAvailable = this.state.colors;
+  colorizeCluster = clusterNumber => {
+    const colorsAvailable = this.state.colors;
     if (clusterNumber === -1) {
       return NOISE_COLOR;
     }
