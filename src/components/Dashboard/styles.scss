@@ -1,5 +1,6 @@
 .dashboard-body {
   height: 75vh;
   width: 100%;
-  display: grid;
+  display: flex;
+  flex-direction: row;
 }

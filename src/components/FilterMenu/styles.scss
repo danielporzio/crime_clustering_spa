@@ -1,8 +1,11 @@
 @import "../app/colors";
 
 .filter-menu {
-  height: 20%;
-  margin: 25px 0 10px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 30px;
+  width: 30%;
 }
 
 .filter-menu__select {
@@ -12,6 +15,7 @@
 
 .filter-menu__button {
   background-color: $gray-light;
+  width: 100%;
 
   &:hover {
     background-color: $blue-light;

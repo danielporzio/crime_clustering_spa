@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import qs from 'qs';
 
 import { Environment as Env } from '../../config.js';
 import FilterMenu from '../FilterMenu';
@@ -20,7 +21,10 @@ class Dashboard extends React.Component {
     axios
       .get(crimesURL, {
         headers: { 'Access-Control-Allow-Origin': '*' },
-        params: params
+        params: params,
+        paramsSerializer: params => {
+          return qs.stringify(params, {arrayFormat: 'repeat'})
+        }
       })
       .then(response => {
         console.log(response.data)
