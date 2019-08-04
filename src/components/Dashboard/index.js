@@ -16,7 +16,7 @@ class Dashboard extends React.Component {
     };
   }
 
-  getCrimes = (params) => {
+  getCrimes = params => {
     const crimesURL = `${Env.getCurrent().api.dataURL}/crimes`;
     axios
       .get(crimesURL, {

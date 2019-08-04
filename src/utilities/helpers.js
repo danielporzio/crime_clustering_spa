@@ -1,3 +1,10 @@
+function groupBy(xs, key) {
+  return xs.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
 function createRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -5,6 +12,6 @@ function createRandomColor() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
-}
+};
 
-export default createRandomColor;
+export { groupBy, createRandomColor };
