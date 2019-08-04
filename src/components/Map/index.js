@@ -3,6 +3,7 @@ import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import equal from 'fast-deep-equal';
 
 import createRandomColor from '../../data/clusterColors.js';
+import { groupBy } from '../../utilities/helpers.js';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
 
@@ -18,58 +19,33 @@ class Map extends React.Component {
     super();
 
     this.state = {
-      mapStyle: 'mapbox://styles/mapbox/light-v10',
-      viewport: {
-        latitude: 41.878113,
-        longitude: -87.629799,
-        zoom: 8,
-      },
       markers: this.displayCrimes(props.crimes),
       colors: {}
     };
-
-    this.map = React.createRef();
   }
 
   componentDidUpdate(prevProps) {
     if (!equal(this.props.crimes, prevProps.crimes)) {
-      console.log('update y crimes distintos')
       this.setState({ markers: this.displayCrimes(this.props.crimes) });
     }
   }
 
-  _onViewportChange = viewport => this.setState({ viewport });
-
-  groupBy = (xs, key) => {
-    return xs.reduce((rv, x) => {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
-      return rv;
-    }, {});
-  };
-
   displayCrimes = crimes => {
-    const groupedCrimes = this.groupBy(crimes, 'label');
-    const res = Object.keys(groupedCrimes).map( clusterId => {
+    const groupedCrimes = groupBy(crimes, 'label');
+    return Object.keys(groupedCrimes).map( clusterId => {
       return this.renderLayer(clusterId, groupedCrimes[clusterId]);
     });
-    return res;
-  }
-
-  generateLayers = crimes => {
-
   }
 
   renderLayer = (label, crimes) => {
     return (
       <Layer
-        id= {label}
         key={label}
         type="circle"
         paint= {{
-          // make circles larger as the user zooms from z12 to z22
           'circle-radius': {
-            'base': 1.75,
-            'stops': [[12, 2], [22, 180]]
+            'base': 1,
+            'stops': [[9, 1], [13, 2]]
           },
           'circle-color': this.colorizeCluster(label)
         }}
@@ -86,12 +62,8 @@ class Map extends React.Component {
   renderMarker = (crime, index) => {
     return (
       <Feature
-        id={index}
         coordinates={[crime.longitude, crime.latitude]}
         key={`marker-${index}`}
-        properties= {{
-          color: '#e55e5e'
-        }}
       />
     );
   }
@@ -108,55 +80,19 @@ class Map extends React.Component {
   }
 
   render() {
-    const { mapStyle, viewport } = this.state;
+    const mapParams = {
+      mapStyle: 'mapbox://styles/mapbox/light-v10',
+      latitude: 41.791832,
+      longitude: -87.623177,
+      zoom: [9]
+    };
 
-    // <div className='map-wrapper'>
-    //   <MapGL
-    //     {...viewport}
-    //     width='100%'
-    //     height='100%'
-    //     mapStyle={mapStyle}
-    //     onViewportChange={this._onViewportChange}
-    //     mapboxApiAccessToken={MAPBOX_TOKEN} >
-    //
-    //     { this.state.markers }
-    //
-    //     <div className="fullscreen-control__wrapper">
-    //       <FullscreenControl />
-    //     </div>
-    //     <div className="nav-control__wrapper">
-    //       <NavigationControl onViewportChange={this._onViewportChange} />
-    //     </div>
-    //   </MapGL>
-    // </div>
-
-    // <Layer
-    //   id= 'population'
-    //   type="circle"
-    //   source-layer= 'sf2010'
-    //   source= {{
-    //     type: 'vector',
-    //     url: 'mapbox://examples.8fgz4egr'
-    //   }}
-    //   paint= {{
-    //     // make circles larger as the user zooms from z12 to z22
-    //     'circle-radius': {
-    //       'base': 1.75,
-    //       'stops': [[12, 2], [22, 180]]
-    //     },
-    //     // color circles by ethnicity, using a match expression
-    //     // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
-    //     'circle-color': '#e55e5e'
-    //   }}
-    // >
-    // </Layer>
     return (
       <MapBox
-        ref={this.map}
         container= 'map'
-        style= 'mapbox://styles/mapbox/light-v10'
-        zoom= {[9]}
-        center= {[-87.629799, 41.878113]}
+        style= {mapParams.mapStyle}
+        zoom= {mapParams.zoom}
+        center= {[mapParams.longitude, mapParams.latitude]}
         containerStyle={{
           height: '100vh',
           width: '100vw'
