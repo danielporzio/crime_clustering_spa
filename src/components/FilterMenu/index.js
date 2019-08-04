@@ -3,8 +3,19 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
-
+import { MultipleSelect, SingleSelect } from "react-select-material-ui";
+import { withStyles } from "@material-ui/core/styles"
 import './styles.scss';
+
+const styles = {
+  root: {
+    margin: "0px !important",
+    width: "50% !important"
+  },
+  rootAlgorithm: {
+    margin: "0px !important"
+  }
+}
 
 class FilterMenu extends React.Component {
   constructor() {
@@ -90,14 +101,31 @@ class FilterMenu extends React.Component {
     };
   }
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+  isAll = (val) => {
+    return val === "All"
+  }
+
+  handleChangeValues = (values, name) => {
+    if (values[0] === "All" && values.length > 1) {
+      values.shift()
+      this.setState({ [name]: values });
+      return;
+    }
+    if (values.find(this.isAll) ) {
+      this.setState({ [name]: ["All"] });
+      return;
+    }
+    this.setState({ [name]: values });
   };
 
+  handleChangeSingleValue = (value, name) => {
+    this.setState({ [name]: value });
+  }
+
   prepareCrimeFilters = () => {
-    const { primaryType, year, description, arrest, location, domestic, algorithmType } = this.state
+    const { crimeType, year, description, arrest, location, domestic, algorithmType } = this.state
     const params = {
-      primary_type: primaryType,
+      primary_type: crimeType,
       year: year,
       description: description,
       arrest: arrest,
@@ -106,7 +134,12 @@ class FilterMenu extends React.Component {
       algorithm: algorithmType
     };
     const filteredParams = Object.keys(params).reduce( (previous, key) => {
-      if (typeof params[key] !== 'undefined' && params[key] !== 'All') {
+      if (
+        typeof params[key] !== 'undefined' &&
+        params[key] !== 'All' &&
+        params[key][0] !== 'All' &&
+        params[key].length > 0
+      ) {
         previous[key] = params[key];
       }
       return previous;
@@ -115,124 +148,88 @@ class FilterMenu extends React.Component {
   }
 
   render() {
+    const { classes } = this.props
     return (
       <div className='filter-menu'>
-        <InputLabel htmlFor="year-label">Year</InputLabel>
-        <Select
-          className='filter-menu__select'
-          value={this.state.year || 'All'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'year',
-            id: 'year-select',
+        <MultipleSelect
+          label="Year"
+          values={this.state.year}
+          options={this.state.years}
+          onChange={e => this.handleChangeValues(e, "year")}
+          SelectProps={{
+            isCreatable: false,
+            msgNoOptionsAvailable: "All years are selected",
+            msgNoOptionsMatchFilter: "No year matches the filter"
           }}
-        >
-          {
-            this.state.years.map(year => {
-              return <MenuItem key={year} value={year}>{year}</MenuItem>;
-            })
-          }
-        </Select>
-
-        <InputLabel htmlFor="crimeType-label">Crime type</InputLabel>
-        <Select
-          className='filter-menu__select'
-          value={this.state.crimeType || 'All'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'crimeType',
-            id: 'crimeType-select',
+        />
+        <MultipleSelect
+          label="Crime type"
+          values={this.state.crimeType}
+          options={this.state.primaryTypes}
+          onChange={e => this.handleChangeValues(e, "crimeType")}
+          SelectProps={{
+            isCreatable: false,
+            msgNoOptionsAvailable: "All types are selected",
+            msgNoOptionsMatchFilter: "No type matches the filter"
           }}
-        >
-          {
-            this.state.primaryTypes.map(type => {
-              return <MenuItem key={type} value={type}>{type}</MenuItem>;
-            })
-          }
-        </Select>
-        <InputLabel htmlFor="description-label">Description</InputLabel>
-        <Select
-          className='filter-menu__select'
-          value={this.state.description || 'All'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'description',
-            id: 'description-select',
+        />
+        <MultipleSelect
+          label="Description"
+          values={this.state.description}
+          options={this.state.descriptions}
+          onChange={e => this.handleChangeValues(e, "description")}
+          SelectProps={{
+            isCreatable: false,
+            msgNoOptionsAvailable: "All descriptions are selected",
+            msgNoOptionsMatchFilter: "No descripton matches the filter"
           }}
-        >
-          {
-            this.state.descriptions.map(description => {
-              return <MenuItem key={description} value={description}>{description}</MenuItem>;
-            })
-          }
-        </Select>
-        <InputLabel htmlFor="locationDescriptions-label">Location</InputLabel>
-        <Select
-          className='filter-menu__select'
-          value={this.state.location || 'All'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'location',
-            id: 'location-select',
+        />
+        <MultipleSelect
+          label="Location"
+          values={this.state.location}
+          options={this.state.locationDescriptions}
+          onChange={e => this.handleChangeValues(e, "location")}
+          SelectProps={{
+            isCreatable: false,
+            msgNoOptionsAvailable: "All locations are selected",
+            msgNoOptionsMatchFilter: "No location matches the filter"
           }}
-        >
-          {
-            this.state.locationDescriptions.map(location => {
-              return <MenuItem key={location} value={location}>{location}</MenuItem>;
-            })
-          }
-        </Select>
-        <InputLabel htmlFor="arrests-label">Arrest</InputLabel>
-        <Select
-          className='filter-menu__select'
-          value={this.state.arrest || 'All'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'arrest',
-            id: 'arrest-select',
+        />
+        <SingleSelect
+          label="Arrest"
+          value={this.state.arrest}
+          placeholder="Arrest"
+          options={this.state.arrests} 
+          onChange={e => this.handleChangeSingleValue(e, "arrest")} 
+          classes={{
+            root: classes.root
           }}
-        >
-          {
-            this.state.arrests.map(arrest => {
-              return <MenuItem key={arrest} value={arrest}>{arrest}</MenuItem>;
-            })
-          }
-        </Select>
-        <InputLabel htmlFor="domestics-label">Domestic</InputLabel>
-        <Select
-          className='filter-menu__select'
-          value={this.state.domestic || 'All'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'domestic',
-            id: 'domestic-select',
+        />
+        <SingleSelect
+          label="Domestic"
+          value={this.state.domestic}
+          placeholder="Domestic"
+          options={this.state.domestics} 
+          onChange={e => this.handleChangeSingleValue(e, "domestic")}
+          classes={{
+            root: classes.root
           }}
-        >
-          {
-            this.state.domestics.map(domestic => {
-              return <MenuItem key={domestic} value={domestic}>{domestic}</MenuItem>;
-            })
-          }
-        </Select>
-        <Select
-          className='filter-menu__select'
-          value={this.state.algorithmType || 'None'}
-          onChange={this.handleChange}
-          inputProps={{
-            name: 'algorithmType',
-            id: 'algorithmType-select',
-          }}
-        >
-          {
-            this.state.algorithmTypes.map(algorithmType => {
-              return <MenuItem key={algorithmType} value={algorithmType}>{algorithmType}</MenuItem>;
-            })
-          }
-        </Select>
+        />
+        <SingleSelect
+          label="Algorithm type"
+          value={this.state.algorithmType}
+          placeholder="Algorithm type"
+          options={this.state.algorithmTypes} 
+          onChange={e => this.handleChangeSingleValue(e, "algorithmType")}
+          classes={{
+            root: classes.rootAlgorithm
+          }} 
+        />
         <Button
           variant="contained"
           className='filter-menu__button'
-          onClick={this.prepareCrimeFilters}>
+          onClick={this.prepareCrimeFilters}
+        >
           Submit
         </Button>
       </div>
@@ -240,4 +237,4 @@ class FilterMenu extends React.Component {
   }
 }
 
-export default FilterMenu;
+export default withStyles(styles)(FilterMenu);
