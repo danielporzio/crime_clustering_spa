@@ -4,17 +4,25 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import { MultipleSelect, SingleSelect } from "react-select-material-ui";
-import { withStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/core/styles";
+import TextField from '@material-ui/core/TextField';
+
 import './styles.scss';
 
 const styles = {
   root: {
-    margin: "0px !important",
-    width: "50% !important"
+    margin: "0px 0px 10px 0px !important",
+    width: "50% !important",
   },
   rootAlgorithm: {
-    margin: "0px !important"
-  }
+    margin: "0px 0px 10px 0px !important",
+  },
+  genRoot: {
+    margin: "0px 0px 10px 0px !important"
+  },
+  textField: {
+    width: "90%",
+  },
 }
 
 class FilterMenu extends React.Component {
@@ -95,9 +103,9 @@ class FilterMenu extends React.Component {
         'None',
         'DBSCAN',
         'HDBSCAN',
-        'K-MEANS',
-        'DBSCAN++'
-      ]
+        'K-MEANS'
+      ],
+      params: {}
     };
   }
 
@@ -118,33 +126,111 @@ class FilterMenu extends React.Component {
     this.setState({ [name]: values });
   };
 
-  handleChangeSingleValue = (value, name) => {
+  handleChangeSingleValue = (value, name, param) => {
+    if (param) {
+      const { params } = this.state;
+      const newParams = { ...params, [name]: value };
+      this.setState({ params: newParams });
+      return;
+    }
+    
+    if (name === 'algorithmType') {
+      this.setState({ [name]: value, params: {} });
+      return;
+    }
     this.setState({ [name]: value });
   }
 
   prepareCrimeFilters = () => {
-    const { crimeType, year, description, arrest, location, domestic, algorithmType } = this.state
-    const params = {
+    const { crimeType, year, description, arrest, location, domestic, algorithmType, params } = this.state
+    const paramsToSend = {
       primary_type: crimeType,
       year: year,
       description: description,
       arrest: arrest,
       location_description: location,
       domestic: domestic,
-      algorithm: algorithmType
+      algorithm: algorithmType,
+      ...params
     };
-    const filteredParams = Object.keys(params).reduce( (previous, key) => {
+    const filteredParams = Object.keys(paramsToSend).reduce( (previous, key) => {
       if (
-        typeof params[key] !== 'undefined' &&
-        params[key] !== 'All' &&
-        params[key][0] !== 'All' &&
-        params[key].length > 0
+        typeof paramsToSend[key] !== 'undefined' &&
+        paramsToSend[key] !== 'All' &&
+        paramsToSend[key][0] !== 'All' &&
+        (paramsToSend[key].length > 0 || Object.keys(paramsToSend[key]).length > 0)
       ) {
-        previous[key] = params[key];
+        previous[key] = paramsToSend[key];
       }
       return previous;
     }, {});
     this.props.getCrimes(filteredParams);
+  }
+
+  algorithmParams = () => {
+    const { algorithmType, params } = this.state
+    const { classes } = this.props
+    switch (algorithmType) {
+      case 'DBSCAN': {
+        return (
+          <>
+            <TextField
+              id='epsilon'
+              label='Epsilon'
+              className={classes.textField}
+              value={params.epsilon || ''}
+              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'epsilon', 'params')}
+              margin='normal'
+            />
+            <TextField
+              id='minSamples'
+              label='Min samples'
+              className={classes.textField}
+              value={params.minSamples || ''}
+              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'minSamples', 'params')}
+              margin='normal'
+            />
+          </>
+        )
+      }
+      case 'K-MEANS': {
+        return  (
+          <TextField
+            id='numberClusters'
+            label='Number of clusters'
+            className={classes.textField}
+            value={params.numberClusters || ''}
+            onChange={(e) => this.handleChangeSingleValue(e.target.value, 'numberClusters', 'params')}
+            margin='normal'
+          />
+        )
+      }
+      case 'HDBSCAN': {
+        return  (
+          <>
+            <TextField
+              id='minClusterSize'
+              label='Min cluster size'
+              className={classes.textField}
+              value={params.minClusterSize || ''}
+              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'minClusterSize', 'params')}
+              margin='normal'
+            />
+            <TextField
+              id='minSamples'
+              label='Min samples'
+              className={classes.textField}
+              value={params.minSamples || ''}
+              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'minSamples', 'params')}
+              margin='normal'
+            />
+          </>
+        )
+      }
+      default: {
+        return null
+      }
+    }
   }
 
   render() {
@@ -161,6 +247,9 @@ class FilterMenu extends React.Component {
             msgNoOptionsAvailable: "All years are selected",
             msgNoOptionsMatchFilter: "No year matches the filter"
           }}
+          classes={{
+            root: classes.genRoot
+          }} 
         />
         <MultipleSelect
           label="Crime type"
@@ -172,6 +261,9 @@ class FilterMenu extends React.Component {
             msgNoOptionsAvailable: "All types are selected",
             msgNoOptionsMatchFilter: "No type matches the filter"
           }}
+          classes={{
+            root: classes.genRoot
+          }} 
         />
         <MultipleSelect
           label="Description"
@@ -183,6 +275,9 @@ class FilterMenu extends React.Component {
             msgNoOptionsAvailable: "All descriptions are selected",
             msgNoOptionsMatchFilter: "No descripton matches the filter"
           }}
+          classes={{
+            root: classes.genRoot
+          }} 
         />
         <MultipleSelect
           label="Location"
@@ -194,6 +289,9 @@ class FilterMenu extends React.Component {
             msgNoOptionsAvailable: "All locations are selected",
             msgNoOptionsMatchFilter: "No location matches the filter"
           }}
+          classes={{
+            root: classes.genRoot
+          }} 
         />
         <SingleSelect
           label="Arrest"
@@ -225,6 +323,7 @@ class FilterMenu extends React.Component {
             root: classes.rootAlgorithm
           }} 
         />
+        {this.algorithmParams()}
         <Button
           variant="contained"
           className='filter-menu__button'

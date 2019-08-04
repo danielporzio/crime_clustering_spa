@@ -4,8 +4,10 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  margin: 30px;
+  margin: 0px 10px 0px 20px;
   width: 30%;
+  overflow-y: auto;
+  height: 85vh;
 }
 
 .filter-menu__select {
