@@ -23,7 +23,6 @@ class Dashboard extends React.Component {
         params: params
       })
       .then(response => {
-        console.log(response.data)
         this.setState({ crimes: response.data });
       });
   };

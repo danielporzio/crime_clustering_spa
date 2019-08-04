@@ -5,7 +5,6 @@ env:
 
 plugins:
   - import
-  - jest
   - react
 
 rules:
@@ -48,9 +47,6 @@ rules:
   import/no-commonjs: 2
   import/prefer-default-export: 0
   import/order: [2, {newlines-between: always, groups: [builtin, external, parent, sibling, index]}]
-
-  jest/no-focused-tests: 2
-  jest/no-identical-title: 2
 
   react/class-methods-use-this: 0
   react/jsx-uses-react: 2

@@ -2,13 +2,13 @@ import React from 'react';
 import MapGL, { Marker, NavigationControl, FullscreenControl } from 'react-map-gl';
 import equal from 'fast-deep-equal';
 
-import colorCluster from '../../data/clusterColors.js';
+import createRandomColor from '../../data/clusterColors.js';
 import MapPin from '../MapPin';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
 
-
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
+const NOISE_COLOR = '#000';
 
 class Map extends React.Component {
   constructor(props) {
@@ -21,27 +21,40 @@ class Map extends React.Component {
         longitude: -87.629799,
         zoom: 8,
       },
-      markers: props.crimes.map(this._renderMarker)
+      colors: {},
+      markers: props.crimes.map(this.renderMarker)
     };
   }
 
   componentDidUpdate(prevProps) {
     if (!equal(this.props.crimes, prevProps.crimes)) {
-      this.setState({ markers: this.props.crimes.map(this._renderMarker) });
+      this.setState({ markers: this.props.crimes.map(this.renderMarker) });
     }
   }
 
   _onViewportChange = viewport => this.setState({ viewport });
 
-  _renderMarker = (crime, index) => {
+  renderMarker = (crime, index) => {
     return (
       <Marker
         key={`marker-${index}`}
         longitude={crime.longitude}
         latitude={crime.latitude} >
-        <MapPin size={5} color={colorCluster(crime.cluster)}/>
+        <MapPin size={5} color={this.colorizeCluster(crime.label)}/>
       </Marker>
     );
+  }
+
+  colorizeCluster = clusterNumber => {
+    const colorsAvailable = this.state.colors;
+    if (clusterNumber === -1) {
+      return NOISE_COLOR;
+    }
+    if (!colorsAvailable[clusterNumber]) {
+      colorsAvailable[clusterNumber] = createRandomColor();
+    } else {
+      return colorsAvailable[clusterNumber];
+    }
   }
 
   render() {
