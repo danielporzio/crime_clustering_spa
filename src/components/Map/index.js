@@ -2,8 +2,7 @@ import React from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import equal from 'fast-deep-equal';
 
-import createRandomColor from '../../data/clusterColors.js';
-import { groupBy } from '../../utilities/helpers.js';
+import { groupBy, createRandomColor } from '../../utilities/helpers.js';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
 
