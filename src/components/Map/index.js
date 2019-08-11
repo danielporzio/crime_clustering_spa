@@ -2,12 +2,13 @@ import React from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import equal from 'fast-deep-equal';
 
-import { groupBy, createRandomColor } from '../../utilities/helpers.js';
+import { groupBy, createRandomColor, orderBySize } from '../../utilities/helpers.js';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiZGFuaWVscG9yemlvIiwiYSI6ImNqdTcwcGx0azFwaHk0ZGxvcWxmYmU5eHIifQ.Bg7h34qDDBTzzGOvtfm6TQ';
-const NOISE_COLOR = '#000';
+const NOISE_COLOR = '#000000';
+const CLUSTERS_TO_SHOW = 60;
 
 const MapBox = ReactMapboxGl({
   accessToken: MAPBOX_TOKEN
@@ -31,9 +32,34 @@ class Map extends React.Component {
 
   displayCrimes = crimes => {
     const groupedCrimes = groupBy(crimes, 'label');
-    return Object.keys(groupedCrimes).map( clusterId => {
+    const clusterIds    = Object.keys(groupedCrimes);
+    if (clusterIds.length > CLUSTERS_TO_SHOW) {
+      var clustersSizes = [];
+      for (var cluster in groupedCrimes) {
+        clustersSizes.push([cluster, groupedCrimes[cluster].length]);
+      }
+      const clustersOrderedBySize = clustersSizes.sort(orderBySize);
+      const biggestClustersIds    = clustersOrderedBySize.slice(0, CLUSTERS_TO_SHOW).map(clusterData => { return clusterData[0]; });
+      const remainingClustersIds  = clustersOrderedBySize.slice(CLUSTERS_TO_SHOW).map(clusterData => { return clusterData[0]; });
+      return this.renderBiggestClustersWithNoise(groupedCrimes, biggestClustersIds, remainingClustersIds);
+    } else {
+      return this.renderClusters(clusterIds, groupedCrimes);
+    }
+  }
+
+  renderClusters = (clusterIds, groupedCrimes) => {
+    return clusterIds.map( clusterId => {
       return this.renderLayer(clusterId, groupedCrimes[clusterId]);
     });
+  }
+
+  renderBiggestClustersWithNoise = (groupedCrimes, biggestClustersIds, remainingClustersIds) => {
+    const clustersToShow = this.renderClusters(biggestClustersIds, groupedCrimes);
+    let remainingClustersJoined = [];
+    remainingClustersIds.forEach(clusterId => {
+      remainingClustersJoined = remainingClustersJoined.concat(groupedCrimes[clusterId]);
+    });
+    return clustersToShow.concat(this.renderLayer('-1', remainingClustersJoined));
   }
 
   renderLayer = (label, crimes) => {
@@ -69,7 +95,7 @@ class Map extends React.Component {
 
   colorizeCluster = clusterNumber => {
     const colorsAvailable = this.state.colors;
-    if (clusterNumber === -1) {
+    if (clusterNumber === '-1') {
       return NOISE_COLOR;
     }
     if (!colorsAvailable[clusterNumber]) {

@@ -14,4 +14,8 @@ function createRandomColor() {
   return color;
 };
 
-export { groupBy, createRandomColor };
+function orderBySize(size1, size2) {
+  return size2[1] - size1[1];
+};
+
+export { groupBy, createRandomColor, orderBySize };
