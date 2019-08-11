@@ -1,29 +1,26 @@
 import React from 'react';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
-import { MultipleSelect, SingleSelect } from "react-select-material-ui";
-import { withStyles } from "@material-ui/core/styles";
+import { MultipleSelect, SingleSelect } from 'react-select-material-ui';
+import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
 import './styles.scss';
 
 const styles = {
   root: {
-    margin: "0px 0px 10px 0px !important",
-    width: "50% !important",
+    margin: '0 0 10px 0 !important',
+    width: '50% !important',
   },
   rootAlgorithm: {
-    margin: "0px 0px 10px 0px !important",
+    margin: '0 0 10px 0 !important',
   },
   genRoot: {
-    margin: "0px 0px 10px 0px !important"
+    margin: '0 0 10px 0 !important'
   },
   textField: {
-    width: "90%",
+    width: '90%',
   },
-}
+};
 
 class FilterMenu extends React.Component {
   constructor() {
@@ -99,6 +96,10 @@ class FilterMenu extends React.Component {
         'True',
         'False'
       ],
+      useWeights: [
+        'True',
+        'False'
+      ],
       algorithmTypes: [
         'None',
         'DBSCAN',
@@ -109,18 +110,18 @@ class FilterMenu extends React.Component {
     };
   }
 
-  isAll = (val) => {
-    return val === "All"
+  isAll = val => {
+    return val === 'All';
   }
 
   handleChangeValues = (values, name) => {
-    if (values[0] === "All" && values.length > 1) {
-      values.shift()
+    if (values[0] === 'All' && values.length > 1) {
+      values.shift();
       this.setState({ [name]: values });
       return;
     }
     if (values.find(this.isAll) ) {
-      this.setState({ [name]: ["All"] });
+      this.setState({ [name]: ['All'] });
       return;
     }
     this.setState({ [name]: values });
@@ -133,7 +134,7 @@ class FilterMenu extends React.Component {
       this.setState({ params: newParams });
       return;
     }
-    
+
     if (name === 'algorithmType') {
       this.setState({ [name]: value, params: {} });
       return;
@@ -142,7 +143,7 @@ class FilterMenu extends React.Component {
   }
 
   prepareCrimeFilters = () => {
-    const { crimeType, year, description, arrest, location, domestic, algorithmType, params } = this.state
+    const { crimeType, year, description, arrest, location, domestic, useWeight, algorithmType, params } = this.state;
     const paramsToSend = {
       primary_type: crimeType,
       year: year,
@@ -151,6 +152,7 @@ class FilterMenu extends React.Component {
       location_description: location,
       domestic: domestic,
       algorithm: algorithmType,
+      useWeights: useWeight,
       ...params
     };
     const filteredParams = Object.keys(paramsToSend).reduce( (previous, key) => {
@@ -168,164 +170,174 @@ class FilterMenu extends React.Component {
   }
 
   algorithmParams = () => {
-    const { algorithmType, params } = this.state
-    const { classes } = this.props
+    const { algorithmType, params } = this.state;
+    const { classes } = this.props;
     switch (algorithmType) {
-      case 'DBSCAN': {
-        return (
-          <>
-            <TextField
-              id='epsilon'
-              label='Epsilon'
-              className={classes.textField}
-              value={params.epsilon || ''}
-              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'epsilon', 'params')}
-              margin='normal'
-            />
-            <TextField
-              id='minSamples'
-              label='Min samples'
-              className={classes.textField}
-              value={params.minSamples || ''}
-              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'minSamples', 'params')}
-              margin='normal'
-            />
-          </>
-        )
-      }
-      case 'K-MEANS': {
-        return  (
+    case 'DBSCAN': {
+      return (
+        <>
           <TextField
-            id='numberClusters'
-            label='Number of clusters'
+            id='epsilon'
+            label='Epsilon'
             className={classes.textField}
-            value={params.numberClusters || ''}
-            onChange={(e) => this.handleChangeSingleValue(e.target.value, 'numberClusters', 'params')}
+            value={params.epsilon || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'epsilon', 'params')}
             margin='normal'
           />
-        )
-      }
-      case 'HDBSCAN': {
-        return  (
-          <>
-            <TextField
-              id='minClusterSize'
-              label='Min cluster size'
-              className={classes.textField}
-              value={params.minClusterSize || ''}
-              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'minClusterSize', 'params')}
-              margin='normal'
-            />
-            <TextField
-              id='minSamples'
-              label='Min samples'
-              className={classes.textField}
-              value={params.minSamples || ''}
-              onChange={(e) => this.handleChangeSingleValue(e.target.value, 'minSamples', 'params')}
-              margin='normal'
-            />
-          </>
-        )
-      }
-      default: {
-        return null
-      }
+          <TextField
+            id='minSamples'
+            label='Min samples'
+            className={classes.textField}
+            value={params.minSamples || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'minSamples', 'params')}
+            margin='normal'
+          />
+        </>
+      );
+    }
+    case 'K-MEANS': {
+      return  (
+        <TextField
+          id='numberClusters'
+          label='Number of clusters'
+          className={classes.textField}
+          value={params.numberClusters || ''}
+          onChange={e => this.handleChangeSingleValue(e.target.value, 'numberClusters', 'params')}
+          margin='normal'
+        />
+      );
+    }
+    case 'HDBSCAN': {
+      return  (
+        <>
+          <TextField
+            id='minClusterSize'
+            label='Min cluster size'
+            className={classes.textField}
+            value={params.minClusterSize || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'minClusterSize', 'params')}
+            margin='normal'
+          />
+          <TextField
+            id='minSamples'
+            label='Min samples'
+            className={classes.textField}
+            value={params.minSamples || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'minSamples', 'params')}
+            margin='normal'
+          />
+        </>
+      );
+    }
+    default: {
+      return null;
+    }
     }
   }
 
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
     return (
       <div className='filter-menu'>
         <MultipleSelect
-          label="Year"
+          label='Year'
           values={this.state.year}
           options={this.state.years}
-          onChange={e => this.handleChangeValues(e, "year")}
+          onChange={e => this.handleChangeValues(e, 'year')}
           SelectProps={{
             isCreatable: false,
-            msgNoOptionsAvailable: "All years are selected",
-            msgNoOptionsMatchFilter: "No year matches the filter"
+            msgNoOptionsAvailable: 'All years are selected',
+            msgNoOptionsMatchFilter: 'No year matches the filter'
           }}
           classes={{
             root: classes.genRoot
-          }} 
+          }}
         />
         <MultipleSelect
-          label="Crime type"
+          label='Crime type'
           values={this.state.crimeType}
           options={this.state.primaryTypes}
-          onChange={e => this.handleChangeValues(e, "crimeType")}
+          onChange={e => this.handleChangeValues(e, 'crimeType')}
           SelectProps={{
             isCreatable: false,
-            msgNoOptionsAvailable: "All types are selected",
-            msgNoOptionsMatchFilter: "No type matches the filter"
+            msgNoOptionsAvailable: 'All types are selected',
+            msgNoOptionsMatchFilter: 'No type matches the filter'
           }}
           classes={{
             root: classes.genRoot
-          }} 
+          }}
         />
         <MultipleSelect
-          label="Description"
+          label='Description'
           values={this.state.description}
           options={this.state.descriptions}
-          onChange={e => this.handleChangeValues(e, "description")}
+          onChange={e => this.handleChangeValues(e, 'description')}
           SelectProps={{
             isCreatable: false,
-            msgNoOptionsAvailable: "All descriptions are selected",
-            msgNoOptionsMatchFilter: "No descripton matches the filter"
+            msgNoOptionsAvailable: 'All descriptions are selected',
+            msgNoOptionsMatchFilter: 'No descripton matches the filter'
           }}
           classes={{
             root: classes.genRoot
-          }} 
+          }}
         />
         <MultipleSelect
-          label="Location"
+          label='Location'
           values={this.state.location}
           options={this.state.locationDescriptions}
-          onChange={e => this.handleChangeValues(e, "location")}
+          onChange={e => this.handleChangeValues(e, 'location')}
           SelectProps={{
             isCreatable: false,
-            msgNoOptionsAvailable: "All locations are selected",
-            msgNoOptionsMatchFilter: "No location matches the filter"
+            msgNoOptionsAvailable: 'All locations are selected',
+            msgNoOptionsMatchFilter: 'No location matches the filter'
           }}
           classes={{
             root: classes.genRoot
-          }} 
+          }}
         />
         <SingleSelect
-          label="Arrest"
+          label='Arrest'
           value={this.state.arrest}
-          placeholder="Arrest"
-          options={this.state.arrests} 
-          onChange={e => this.handleChangeSingleValue(e, "arrest")} 
+          placeholder='Arrest'
+          options={this.state.arrests}
+          onChange={e => this.handleChangeSingleValue(e, 'arrest')}
           classes={{
             root: classes.root
           }}
         />
         <SingleSelect
-          label="Domestic"
+          label='Domestic'
           value={this.state.domestic}
-          placeholder="Domestic"
-          options={this.state.domestics} 
-          onChange={e => this.handleChangeSingleValue(e, "domestic")}
+          placeholder='Domestic'
+          options={this.state.domestics}
+          onChange={e => this.handleChangeSingleValue(e, 'domestic')}
           classes={{
             root: classes.root
           }}
         />
         <SingleSelect
-          label="Algorithm type"
+          label='Algorithm type'
           value={this.state.algorithmType}
-          placeholder="Algorithm type"
-          options={this.state.algorithmTypes} 
-          onChange={e => this.handleChangeSingleValue(e, "algorithmType")}
+          placeholder='Algorithm type'
+          options={this.state.algorithmTypes}
+          onChange={e => this.handleChangeSingleValue(e, 'algorithmType')}
           classes={{
             root: classes.rootAlgorithm
-          }} 
+          }}
         />
         {this.algorithmParams()}
+        <SingleSelect
+          label='Use Weights'
+          value={this.state.useWeight}
+          placeholder='False'
+          options={this.state.useWeights}
+          onChange={e => this.handleChangeSingleValue(e, 'useWeight')}
+          classes={{
+            root: classes.root
+          }}
+        />
         <Button
-          variant="contained"
+          variant='contained'
           className='filter-menu__button'
           onClick={this.prepareCrimeFilters}
         >
