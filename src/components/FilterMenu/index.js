@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { MultipleSelect, SingleSelect } from 'react-select-material-ui';
@@ -104,7 +105,8 @@ class FilterMenu extends React.Component {
         'None',
         'DBSCAN',
         'HDBSCAN',
-        'K-MEANS'
+        'K-MEANS',
+        'WEIGHTED-MM-KMEANS'
       ],
       params: {}
     };
@@ -139,6 +141,12 @@ class FilterMenu extends React.Component {
       this.setState({ [name]: value, params: {} });
       return;
     }
+    if (name === 'minClusterWeight' || name === 'maxClusterWeight') {
+      this.setState({ numberClusters: undefined });
+    }
+    if (name === 'numberClusters') {
+      this.setState({ minClusterWeight: undefined, maxClusterWeight: undefined });
+    }
     this.setState({ [name]: value });
   }
 
@@ -166,6 +174,9 @@ class FilterMenu extends React.Component {
       }
       return previous;
     }, {});
+    if (filteredParams.minClusterWeight || filteredParams.maxClusterWeight) {
+      filteredParams['minMax'] = true;
+    }
     this.props.getCrimes(filteredParams);
   }
 
@@ -197,14 +208,57 @@ class FilterMenu extends React.Component {
     }
     case 'K-MEANS': {
       return  (
-        <TextField
-          id='numberClusters'
-          label='Number of clusters'
-          className={classes.textField}
-          value={params.numberClusters || ''}
-          onChange={e => this.handleChangeSingleValue(e.target.value, 'numberClusters', 'params')}
-          margin='normal'
-        />
+        <>
+          <TextField
+            id='numberClusters'
+            disabled={!!params.maxClusterWeight || !!params.minClusterWeight}
+            label='Number of clusters'
+            className={classes.textField}
+            value={params.numberClusters || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'numberClusters', 'params')}
+            margin='normal'
+          />
+          <TextField
+            id='minClusterWeight'
+            disabled={!!params.numberClusters}
+            label='Minimum weight'
+            className={classes.textField}
+            value={params.minClusterWeight || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'minClusterWeight', 'params')}
+            margin='normal'
+          />
+          <TextField
+            id='maxClusterWeight'
+            disabled={!!params.numberClusters}
+            label='Maximum weight'
+            className={classes.textField}
+            value={params.maxClusterWeight || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'maxClusterWeight', 'params')}
+            margin='normal'
+          />
+        </>
+      );
+    }
+    case 'WEIGHTED-MM-KMEANS': {
+      return  (
+        <>
+          <TextField
+            id='minClusterWeight'
+            label='Minimum weight'
+            className={classes.textField}
+            value={params.minClusterWeight || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'minClusterWeight', 'params')}
+            margin='normal'
+          />
+          <TextField
+            id='maxClusterWeight'
+            label='Maximum weight'
+            className={classes.textField}
+            value={params.maxClusterWeight || ''}
+            onChange={e => this.handleChangeSingleValue(e.target.value, 'maxClusterWeight', 'params')}
+            margin='normal'
+          />
+        </>
       );
     }
     case 'HDBSCAN': {
@@ -333,7 +387,7 @@ class FilterMenu extends React.Component {
           options={this.state.useWeights}
           onChange={e => this.handleChangeSingleValue(e, 'useWeight')}
           classes={{
-            root: classes.root
+            root: classes.rootAlgorithm
           }}
         />
         <Button
