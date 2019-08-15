@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import equal from 'fast-deep-equal';
 
+import MapLegend from '../MapLegend';
 import { groupBy, createRandomColor, orderBySize } from '../../utilities/helpers.js';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles.scss';
@@ -20,7 +21,8 @@ class Map extends React.Component {
 
     this.state = {
       markers: this.displayCrimes(props.crimes),
-      colors: {}
+      colors: {},
+      clustersInfo: {}
     };
   }
 
@@ -38,6 +40,7 @@ class Map extends React.Component {
       for (var cluster in groupedCrimes) {
         clustersSizes.push([cluster, groupedCrimes[cluster].length]);
       }
+
       const clustersOrderedBySize = clustersSizes.sort(orderBySize);
       const biggestClustersIds    = clustersOrderedBySize.slice(0, CLUSTERS_TO_SHOW).map(clusterData => { return clusterData[0]; });
       const remainingClustersIds  = clustersOrderedBySize.slice(CLUSTERS_TO_SHOW).map(clusterData => { return clusterData[0]; });
@@ -63,6 +66,8 @@ class Map extends React.Component {
   }
 
   renderLayer = (label, crimes) => {
+    const clusterColor = this.colorizeCluster(label);
+    this.renderLayerInfo(label, clusterColor, crimes);
     return (
       <Layer
         key={label}
@@ -72,7 +77,7 @@ class Map extends React.Component {
             'base': 1,
             'stops': [[9, 1], [13, 2]]
           },
-          'circle-color': this.colorizeCluster(label)
+          'circle-color': clusterColor
         }}
       >
         {
@@ -82,6 +87,18 @@ class Map extends React.Component {
         }
       </Layer>
     );
+  }
+
+  renderLayerInfo = (label, clusterColor, crimes) => {
+    const clustersInfo = this.state.clustersInfo;
+    const clusterCriminality = crimes.reduce((sum, crime) => {
+      return sum + crime.crime_weight;
+    }, 0);
+    clustersInfo[label] = {
+      color: clusterColor,
+      criminality: clusterCriminality
+    };
+    this.setState({ clustersInfo: clustersInfo });
   }
 
   renderMarker = (crime, index) => {
@@ -113,18 +130,21 @@ class Map extends React.Component {
     };
 
     return (
-      <MapBox
-        container= 'map'
-        style= {mapParams.mapStyle}
-        zoom= {mapParams.zoom}
-        center= {[mapParams.longitude, mapParams.latitude]}
-        containerStyle={{
-          height: '100vh',
-          width: '100vw'
-        }}
-      >
-        { this.state.markers }
-      </MapBox>
+      <>
+        <MapBox
+          container= 'map'
+          style= {mapParams.mapStyle}
+          zoom= {mapParams.zoom}
+          center= {[mapParams.longitude, mapParams.latitude]}
+          containerStyle={{
+            height: '100vh',
+            width: '100vw'
+          }}
+        >
+          { this.state.markers }
+        </MapBox>
+        <MapLegend clustersInfo={this.state.clustersInfo}/>
+      </>
     );
   }
 }
