@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
         headers: { 'Access-Control-Allow-Origin': '*' },
         params: params,
         paramsSerializer: params => {
-          return qs.stringify(params, {arrayFormat: 'repeat'})
+          return qs.stringify(params, { arrayFormat: 'repeat' });
         }
       })
       .then(response => {
