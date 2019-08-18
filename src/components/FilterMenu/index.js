@@ -175,7 +175,7 @@ class FilterMenu extends React.Component {
       return previous;
     }, {});
     if (filteredParams.minClusterWeight || filteredParams.maxClusterWeight) {
-      filteredParams['minMax'] = true;
+      filteredParams['minMax'] = 'True';
     }
     this.props.getCrimes(filteredParams);
   }
