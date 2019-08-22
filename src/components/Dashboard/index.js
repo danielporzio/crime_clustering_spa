@@ -17,6 +17,7 @@ class Dashboard extends React.Component {
   }
 
   getCrimes = params => {
+    this.setState({ clearClustersInfo: true });
     const crimesURL = `${Env.getCurrent().api.dataURL}/crimes`;
     axios
       .get(crimesURL, {
@@ -28,6 +29,7 @@ class Dashboard extends React.Component {
       })
       .then(response => {
         this.setState({ crimes: response.data });
+        this.setState({ clustersInfo: false });
       });
   };
 
@@ -35,7 +37,7 @@ class Dashboard extends React.Component {
     return (
       <div className='dashboard-body'>
         <FilterMenu getCrimes={this.getCrimes}/>
-        <Map crimes={this.state.crimes}/>
+        <Map crimes={this.state.crimes} clearClustersInfo={this.state.clearClustersInfo}/>
       </div>
     );
   }

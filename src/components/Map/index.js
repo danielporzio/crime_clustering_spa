@@ -30,6 +30,10 @@ class Map extends React.Component {
     if (!equal(this.props.crimes, prevProps.crimes)) {
       this.setState({ markers: this.displayCrimes(this.props.crimes) });
     }
+    if (this.props.clearClustersInfo !== prevProps.clearClustersInfo
+      && this.props.clearClustersInfo) {
+      this.setState({ clustersInfo: {} });
+    }
   }
 
   displayCrimes = crimes => {
@@ -90,7 +94,7 @@ class Map extends React.Component {
   }
 
   renderLayerInfo = (label, clusterColor, crimes) => {
-    const clustersInfo = this.state.clustersInfo;
+    const clustersInfo = {};
     const clusterCriminality = crimes.reduce((sum, crime) => {
       return sum + crime.crime_weight;
     }, 0);
