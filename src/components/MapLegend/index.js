@@ -3,7 +3,7 @@ import './styles.scss';
 
 function MapLegend({ clustersInfo }) {
   const clusterIds = Object.keys(clustersInfo);
-  if (clusterIds.length == 0) {
+  if (clusterIds.length === 0) {
     return null;
   }
   return (
