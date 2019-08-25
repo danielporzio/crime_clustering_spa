@@ -21,7 +21,6 @@ class Dashboard extends React.Component {
     const crimesURL = `${Env.getCurrent().api.dataURL}/crimes`;
     axios
       .get(crimesURL, {
-        headers: { 'Access-Control-Allow-Origin': '*' },
         params: params,
         paramsSerializer: params => {
           return qs.stringify(params, { arrayFormat: 'repeat' });
