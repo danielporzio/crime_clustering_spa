@@ -106,6 +106,7 @@ class FilterMenu extends React.Component {
         'DBSCAN',
         'HDBSCAN',
         'K-MEANS',
+        'K-MEAN-O',
         'WEIGHTED-MM-KMEANS'
       ],
       params: {}
