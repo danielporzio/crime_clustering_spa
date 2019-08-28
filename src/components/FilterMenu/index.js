@@ -240,7 +240,7 @@ class FilterMenu extends React.Component {
         </>
       );
     }
-    case 'WEIGHTED-MM-KMEANS': {
+    case 'WEIGHTED-MM-KMEANS': case 'K-MEAN-O': {
       return  (
         <>
           <TextField
