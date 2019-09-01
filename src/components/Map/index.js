@@ -28,11 +28,8 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!equal(this.props.crimes, prevProps.crimes)) {
-      this.setState({ markers: this.displayCrimes(this.props.crimes) });
-    }
-    if (this.props.clearClustersInfo !== prevProps.clearClustersInfo
-      && this.props.clearClustersInfo) {
       this.setState({ clustersInfo: {} });
+      this.setState({ markers: this.displayCrimes(this.props.crimes) });
     }
   }
 
@@ -94,7 +91,7 @@ class Map extends React.Component {
   }
 
   renderLayerInfo = (label, clusterColor, crimes) => {
-    const clustersInfo = {};
+    const clustersInfo = this.state.clustersInfo;
     const clusterCriminality = crimes.reduce((sum, crime) => {
       return sum + crime.crime_weight;
     }, 0);
