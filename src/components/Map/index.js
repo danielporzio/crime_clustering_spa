@@ -36,6 +36,15 @@ class Map extends React.Component {
   displayCrimes = crimes => {
     const groupedCrimes = groupBy(crimes, 'label');
     const clusterIds    = Object.keys(groupedCrimes);
+
+    /// Needed to print the clusters sizes and
+    /// other info for experimentation
+    var clustersSizes = [];
+    for (var cluster in groupedCrimes) {
+      clustersSizes.push([cluster, groupedCrimes[cluster].length]);
+    }
+    console.log(clustersSizes.sort(orderBySize))
+    ///
     if (clusterIds.length > CLUSTERS_TO_SHOW) {
       var clustersSizes = [];
       for (var cluster in groupedCrimes) {

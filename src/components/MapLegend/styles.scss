@@ -8,6 +8,8 @@
   position: absolute;
   right: 5%;
   top: 20vh;
+  max-height: 80vh;
+  overflow: scroll;
 }
 
 .map-legend__cluster {
