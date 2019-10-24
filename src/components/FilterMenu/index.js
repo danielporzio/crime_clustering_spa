@@ -219,24 +219,6 @@ class FilterMenu extends React.Component {
             onChange={e => this.handleChangeSingleValue(e.target.value, 'numberClusters', 'params')}
             margin='normal'
           />
-          <TextField
-            id='minClusterWeight'
-            disabled={!!params.numberClusters}
-            label='Minimum weight'
-            className={classes.textField}
-            value={params.minClusterWeight || ''}
-            onChange={e => this.handleChangeSingleValue(e.target.value, 'minClusterWeight', 'params')}
-            margin='normal'
-          />
-          <TextField
-            id='maxClusterWeight'
-            disabled={!!params.numberClusters}
-            label='Maximum weight'
-            className={classes.textField}
-            value={params.maxClusterWeight || ''}
-            onChange={e => this.handleChangeSingleValue(e.target.value, 'maxClusterWeight', 'params')}
-            margin='normal'
-          />
         </>
       );
     }
